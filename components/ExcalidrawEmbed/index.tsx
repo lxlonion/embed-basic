@@ -17,20 +17,49 @@
  * under the License.
  */
 
-import EmbedContainer from '../EmbedContainer';
+// import EmbedContainer from '../EmbedContainer';
 
-const ExcalidrawEmbed = ({ excalidrawId }) => {
+// const ExcalidrawEmbed = ({ excalidrawId }) => {
+//   return (
+//     <EmbedContainer height={380}>
+//       <iframe
+//         title="Excalidraw"
+//         width="100%"
+//         height="100%"
+//         src={`https://excalidraw.com/${excalidrawId}/embed`}
+//         frameBorder="0"
+//       />
+//     </EmbedContainer>
+//   );
+// };
+
+// export default ExcalidrawEmbed;
+
+import { getLoggedUserInfo } from '@/services';
+import { useState, useEffect } from 'react';
+
+function ExcalidrawEmbed() {
+  const [userInfo, setUserInfo] = useState(null);
+  
+  useEffect(() => {
+    // 调用API获取用户信息
+    getLoggedUserInfo().then((res) => {
+      setUserInfo(res);
+    }).catch(err => {
+      console.error("获取用户信息失败", err);
+    });
+  }, []);
+  
+  if (!userInfo) {
+    return <div>加载中...</div>;
+  }
+  
   return (
-    <EmbedContainer height={380}>
-      <iframe
-        title="Excalidraw"
-        width="100%"
-        height="100%"
-        src={`https://excalidraw.com/${excalidrawId}/embed`}
-        frameBorder="0"
-      />
-    </EmbedContainer>
+    <div>
+      <p>欢迎，{userInfo.username}!</p>
+      <p>您的邮箱: {userInfo.e_mail}</p>
+    </div>
   );
-};
+}
 
 export default ExcalidrawEmbed;
